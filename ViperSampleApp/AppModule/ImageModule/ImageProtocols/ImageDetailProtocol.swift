@@ -37,6 +37,6 @@ protocol ImageDetailInteractorToPresenter: class {
 
 protocol ImageDetailPresenterToRouter: class {
     
-    static func createModule() -> UIViewController
+    static func createModule(with author: String) -> UIViewController
     
 }

@@ -12,8 +12,11 @@ class ViewController: UIViewController  {
     
     // MARK: - Properties
     var presenter: ImageListViewToPresenterProtocol?
-    var shapeArrayList: Array<LiveNewsModel> = Array()
+//    var shapeArrayList: Array<LiveNewsModel> = Array()
 
+    var feedArticles: [LiveNewsModel] = Array()
+    var articlesTitle: [String]?
+    
     lazy var feedCollectionView: UICollectionView = {
         let collectionView = UICollectionView()
         collectionView.dataSource = self
@@ -32,18 +35,13 @@ class ViewController: UIViewController  {
         self.title = News.NEWS_TITLE
        // setupUI()
         setUpScreen()
-        //cardSetUp()
-       // presenter?.startFetchingShapes()
+//        cardSetUp()
+       presenter?.startFetchingShapes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
-    
-    func showImageDetail(){
-        presenter?.showImageDetail()
-    }
-
 }
 
 extension ViewController: ImageListPresenterToViewProtocol{
@@ -52,6 +50,10 @@ extension ViewController: ImageListPresenterToViewProtocol{
         let feed = shapeArrayList[0]
         print(feed.urlToImage as Any)
         print(feed.title ?? "")
+        
+        self.feedArticles = shapeArrayList
+        self.articlesTitle = shapeArrayList.compactMap { $0.title }
+
         self.feedCollectionView.reloadData()
     }
     
@@ -64,18 +66,28 @@ extension ViewController: ImageListPresenterToViewProtocol{
 extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return presenter?.numberOfRowsInSection() ?? 20
+        return feedArticles.count
+//        return 20
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeedCell", for: indexPath) as! FeedCell
         cell.backgroundColor = UIColor.blue
-        cell.nameLabel.text = presenter?.textLabelText(indexPath: indexPath)
+        
+        let feed = feedArticles[indexPath.row]
+        if let urlString = feed.urlToImage{
+            let url = URL(string: urlString)
+            cell.imageView.kf.setImage(with:url)
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
+        let feed = feedArticles[indexPath.row]
+        if let author = feed.author{
+            presenter?.showImageDetail(author: author)
+        }
         print("User tapped on item \(indexPath.row)")
     }
 }
@@ -83,7 +95,30 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate {
 // MARK: - UI Setup
 extension ViewController {
     
-    
+    func setUpScreen(){
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
+        layout.itemSize = CGSize(width: 100, height: 100)
+        feedCollectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
+        feedCollectionView.delegate = self
+        feedCollectionView.dataSource = self
+        feedCollectionView.register(FeedCell.self, forCellWithReuseIdentifier: "FeedCell")
+//        feedCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "FeedCell")
+        feedCollectionView.backgroundColor = UIColor.white
+        self.view.addSubview(feedCollectionView)
+        
+        view.addConstraints([
+            feedCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            feedCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
+            feedCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
+            feedCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        feedCollectionView.reloadData()
+    }
+
+    /*
     func cardSetUp(){
         let cardView: UIView = {
             let view = UIView()
@@ -153,6 +188,8 @@ extension ViewController {
             descriptionLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -8)
         ])
 
+        let url = URL(string: "https://techcrunch.com/wp-content/uploads/2021/05/GettyImages-888792680.jpg?w=659")
+        imageView.kf.setImage(with: url)
 
     }
 
@@ -197,20 +234,8 @@ extension ViewController {
         secondLabel.setContentCompressionResistancePriority(UILayoutPriority.defaultHigh, for: .horizontal)
 
         
-//        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-//        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-//        layout.itemSize = CGSize(width: 100, height: 100)
-//
-    }
-    
-    func setUpScreen(){
-        feedCollectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
-        feedCollectionView.dataSource = self
-        feedCollectionView.delegate = self
-        feedCollectionView.register(FeedCell.self, forCellWithReuseIdentifier: "FeedCell")
-        feedCollectionView.backgroundColor = UIColor.white
-        self.view.addSubview(feedCollectionView)
 
     }
+    */
     
 }

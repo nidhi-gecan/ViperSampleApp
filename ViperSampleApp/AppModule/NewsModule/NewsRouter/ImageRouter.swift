@@ -31,8 +31,8 @@ class ImageRouter: ImageListPresenterToRouterProtocol{
     }
 
     // MARK: - Navigation
-    func pushToDetail(on view: ImageListPresenterToViewProtocol) {
-        let imageDetailViewController = ImageDetailRouter.createModule()
+    func pushToDetail(on view: ImageListPresenterToViewProtocol, author: String) {
+        let imageDetailViewController = ImageDetailRouter.createModule(with: author)
             
         let viewController = view as! ViewController
         viewController.navigationController?

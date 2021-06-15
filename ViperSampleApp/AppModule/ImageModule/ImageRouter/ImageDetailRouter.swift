@@ -11,10 +11,10 @@ import UIKit
 class ImageDetailRouter: ImageDetailPresenterToRouter {
     
     // MARK: Static methods
-    static func createModule() -> UIViewController {
+    static func createModule(with author: String) -> UIViewController {
         
         let viewController = ImageDetailViewController()
-        
+        viewController.titleString = author
         let presenter: ImageDetailViewToPresenter & ImageDetailInteractorToPresenter = ImageDetailPresenter()
         let interactor: ImageDetailPresenterToInteractor = ImageDetailInteractor()
         let router: ImageDetailPresenterToRouter = ImageDetailRouter()

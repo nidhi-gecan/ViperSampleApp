@@ -15,35 +15,27 @@ protocol ImageListViewToPresenterProtocol: class {
     var router: ImageListPresenterToRouterProtocol? {get set}
 
     func startFetchingShapes()
-    func showImageDetail()
-    
-    func numberOfRowsInSection() -> Int
-    func textLabelText(indexPath: IndexPath) -> String?
+    func showImageDetail(author: String)
 }
 
 protocol ImageListPresenterToViewProtocol: class {
     
     func fetchSuccess(shapeArrayList:Array<LiveNewsModel>)
     func fetchError()
-    
 }
 
 protocol ImageListPresenterToInteractorProtocol: class {
     var presenter:ImageListInteractorToPresenterProtocol? {get set}
     func fetchShapes()
-    func fetchImageDetail()
+//    func fetchImageDetail()
 }
 
 protocol ImageListInteractorToPresenterProtocol: class {
     func fetchedSucceed(shapeArrayList:Array<LiveNewsModel>)
     func fetchedError()
-    
-    func fetchedImageDetailSuccess()
-    func fetchedImageDetailError()
-
 }
 
 protocol ImageListPresenterToRouterProtocol: class {
     static func createModule() -> UINavigationController
-    func pushToDetail(on view: ImageListPresenterToViewProtocol)
+    func pushToDetail(on view: ImageListPresenterToViewProtocol, author: String)
 }

@@ -40,9 +40,4 @@ class ImageInteractor: ImageListPresenterToInteractorProtocol{
         }
 
     }
-    
-    func fetchImageDetail(){
-        self.presenter?.fetchedImageDetailSuccess()
-    }
-
 }

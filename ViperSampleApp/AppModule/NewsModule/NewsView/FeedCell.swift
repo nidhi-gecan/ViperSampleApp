@@ -15,18 +15,24 @@ class FeedCell: UICollectionViewCell {
     }
     
     var nameLabel:  UILabel = UILabel(frame: CGRect.zero)
+    var imageView: UIImageView = {
+        let image = UIImageView(image: .checkmark)
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+
 
     override init(frame : CGRect) {
         super.init(frame : frame)
-//        nameLabel.frame.size = CGSize(width: self.frame.width, height: self.frame.height)
-//        self.addSubview(self.nameLabel)
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(nameLabel)
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(imageView)
         self.addConstraints([
-            nameLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            imageView.topAnchor.constraint(equalTo: self.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
-        nameLabel.text = "test"
+         
     }
 }

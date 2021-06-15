@@ -11,15 +11,15 @@ import UIKit
 class ImageDetailViewController: UIViewController {
     
     var presenter: ImageDetailViewToPresenter?
-    
+    var titleString: String = ""
+ 
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         view.backgroundColor = .systemPurple
-        self.title = News.IMAGE_TITLE
-        
+        self.title = titleString
         presenter?.fetchImageDetail()
     }
 
@@ -36,5 +36,3 @@ extension ImageDetailViewController: ImageDetailPresenterToView {
     }
 
 }
-
-
